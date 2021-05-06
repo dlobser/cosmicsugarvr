@@ -31,13 +31,13 @@
 </style>
 
 <div id="thumbnails">
-    <img src="/assets/sgr/thumbnail-20210504-205726.099.png" data-sgr="/assets/sgr/pointCloud-20210504-205726.099.sgr"/>
-    <img src="/assets/sgr/thumbnail-20210504-214744.546.png" data-sgr="/assets/sgr/pointCloud-20210504-214744.546.sgr"/>
-    <img src="/assets/sgr/thumbnail-20210504-233129.665.png" data-sgr="/assets/sgr/pointCloud-20210504-233129.665.sgr"/>
-    <img src="/assets/sgr/thumbnail-20210505-024550.055.png" data-sgr="/assets/sgr/pointCloud-20210505-024550.055.sgr"/>
-    <img src="/assets/sgr/thumbnail-20210505-024744.917.png" data-sgr="/assets/sgr/pointCloud-20210505-024744.917.sgr"/>
-    <img src="/assets/sgr/thumbnail-20210505-025012.665.png" data-sgr="/assets/sgr/pointCloud-20210505-025012.665.sgr"/>
-    <img src="/assets/sgr/thumbnail-20210505-025103.954.png" data-sgr="/assets/sgr/pointCloud-20210505-025103.954.sgr"/>
+    <img src="../assets/sgr/thumbnail-20210504-205726.099.png" data-sgr="../assets/sgr/pointCloud-20210504-205726.099.sgr"/>
+    <img src="../assets/sgr/thumbnail-20210504-214744.546.png" data-sgr="../assets/sgr/pointCloud-20210504-214744.546.sgr"/>
+    <img src="../assets/sgr/thumbnail-20210504-233129.665.png" data-sgr="../assets/sgr/pointCloud-20210504-233129.665.sgr"/>
+    <img src="../assets/sgr/thumbnail-20210505-024550.055.png" data-sgr="../assets/sgr/pointCloud-20210505-024550.055.sgr"/>
+    <img src="../assets/sgr/thumbnail-20210505-024744.917.png" data-sgr="../assets/sgr/pointCloud-20210505-024744.917.sgr"/>
+    <img src="../assets/sgr/thumbnail-20210505-025012.665.png" data-sgr="../assets/sgr/pointCloud-20210505-025012.665.sgr"/>
+    <img src="../assets/sgr/thumbnail-20210505-025103.954.png" data-sgr="../assets/sgr/pointCloud-20210505-025103.954.sgr"/>
 </div>
 
 <iframe id="highscore" src="./highscore/index.html"></iframe>
@@ -54,7 +54,7 @@
                 .contentWindow;
 
             let file = event.target.dataset.sgr;
-            let url = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + file;
+            let url = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + "/" + file;
             console.log(url);
 
             highScoreWindow.postMessage(url);
