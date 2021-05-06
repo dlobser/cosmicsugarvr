@@ -13,15 +13,15 @@
         <div id="container"></div>
 
         <script type="module">
-            import Stats from 'https://mrdoob.github.io/stats.js/build/stats.module.js';
+            //import Stats from 'https://mrdoob.github.io/stats.js/build/stats.module.js';
             import * as THREE from 'https://unpkg.com/three@0.127.0/build/three.module.js'
             import {TrackballControls} from 'https://unpkg.com/three@0.127.0/examples/jsm/controls/TrackballControls.js'
 
             let renderer,
                 scene,
                 camera,
-                controls,
-                stats;
+                controls;
+            //stats;
 
             let particleSystem,
                 uniforms,
@@ -36,11 +36,10 @@
 
                 // Scene setup.
                 scene = new THREE.Scene();
-                camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, .0001, 10000000);
-                camera.position.z = 2;
+                camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, .0001, 10);
+                camera.position.z = 1;
 
                 // Shader setup.
-
                 uniforms = {
                     time: {
                         type: "f",
@@ -65,14 +64,19 @@
 
             void main() {
                 vec4 worldPosition = modelMatrix * vec4(position, 1.0);
-                vColor.rgb = hsv2rgb(vec3(fract(length(worldPosition.xyz) * .005 + time * .04), .4, .7));
+                vec4 mvPosition = viewMatrix * worldPosition; 
 
-                float distanceToCamera = distance(cameraPosition, worldPosition.xyz);
+                // Color.
+                vColor.rgb = hsv2rgb(vec3(fract(length(worldPosition.xyz) * .005 + time * .04), .5, .75));
+                vColor.a = 1.0;
 
-                gl_Position = projectionMatrix * viewMatrix * worldPosition;
+                // Size.
+                float size = 1.0;
+                float scale = .50;
+                gl_PointSize = size * ( scale / - ( mvPosition).z );
 
-                gl_PointSize = mix(2.0, 0.0, clamp(distanceToCamera / 40.0, 0.0, 1.0));
-                vColor.a = mix(1.0, 0.0, clamp(distanceToCamera / 40.0, 0.0, 1.0));
+                // Position.
+                gl_Position = projectionMatrix * mvPosition;
             }
         `;
 
@@ -101,9 +105,16 @@
                 const positions = [];
                 let radius = 1;
                 for (let i = 0; i < particles; i++) {
-                    positions.push((Math.random() * 2 - 1) * radius);
-                    positions.push((Math.random() * 2 - 1) * radius);
-                    positions.push((Math.random() * 2 - 1) * radius);
+
+                    let randomDirection = new THREE
+                        .Vector3(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5)
+                        .normalize();
+                    let randomRadius = Math.random() * radius;
+                    let randomPosition = randomDirection.multiplyScalar(randomRadius);
+
+                    positions.push(randomPosition.x);
+                    positions.push(randomPosition.y);
+                    positions.push(randomPosition.z);
                 }
 
                 geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
@@ -118,14 +129,16 @@
                 // Add to document.
                 const container = document.getElementById('container');
                 container.appendChild(renderer.domElement);
-                stats = new Stats();
-                container.appendChild(stats.dom);
+                //stats = new Stats();
+                //container.appendChild(stats.dom);
 
                 // Controls setup.
                 controls = new TrackballControls(camera, renderer.domElement);
                 controls.rotateSpeed = 2.0;
                 controls.zoomSpeed = 1.2;
                 controls.panSpeed = 0.8;
+                controls.minDistnace = 0;
+                controls.maxDistance = 10;
 
                 // Resize listener.
                 window.addEventListener('resize', () => {
@@ -141,7 +154,7 @@
                 uniforms.time.value = now / 1000.0;
                 renderer.render(scene, camera);
 
-                stats.update();
+                //stats.update();
                 controls.update();
 
                 requestAnimationFrame(animate);
