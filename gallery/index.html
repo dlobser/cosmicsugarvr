@@ -54,7 +54,7 @@
                 .contentWindow;
 
             let file = event.target.dataset.sgr;
-            let url = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + "/" + file;
+            let url = window.location + file;
             console.log(url);
 
             highScoreWindow.postMessage(url);
