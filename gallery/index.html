@@ -1,15 +1,36 @@
-<style>
-    #highscore {
-        position: absolute;
-        margin: auto;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
+<head>
 
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+
+<style>
+
+    #highscoreContainer {
+        position: fixed;
+        top: 1em;
+        left: 1em;
+        bottom: 1em;
+        right: 1em;
+        z-index: 100;
+        display: none;
+        background: black;
+    }
+
+    #highscore {
+        border: none;
         width: 100%;
         height: 100%;
-        border: none;
+    }
+
+    #highscoreClose {
+        position: absolute;
+        top: 0.5em;
+        right: 0.5em;
+        width: 1.5em;
+        height: 1.5em;
+        color: white;
+        cursor: pointer;
     }
 
     #thumbnails {
@@ -23,16 +44,14 @@
         overflow-x: auto;
         overflow-y: hidden;
         white-space: nowrap;
+
+        cursor: pointer;
     }
 
     img {
         width: 128px;
     }
 </style>
-
-
-
-
 
 <div id="thumbnails">
     <img src="../assets/sgr/thumbnail-20210505-234211.538.png" data-sgr="../assets/sgr/pointCloud-20210505-234211.538.sgr"/>
@@ -45,14 +64,29 @@
     <img src="../assets/sgr/thumbnail-20210506-005138.334.png" data-sgr="../assets/sgr/pointCloud-20210506-005138.334.sgr"/>
 </div>
 
-<iframe id="highscore" src="./highscore/index.html"></iframe>
+<div id="highscoreContainer">
+    <div id="highscoreClose">
+        <svg xmlns="http://www.w3.org/2000/svg"  fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+        </svg>
+    </div>
+    <iframe id="highscore" src="./highscore/index.html"></iframe>
+</div>
 
 <script>
+    let container = document.getElementById('highscoreContainer');
+    let close = document.getElementById('highscoreClose');
+    let frame = document.getElementById("highscore");
+
+    close.addEventListener('click', (event) => {
+        container.style.display = 'none';
+    });
 
     let images = document.getElementsByTagName('img');
     for (var i = 0; i < images.length; i++) {
-        console.log(images[i]);
+
         images[i].addEventListener('click', (event) => {
+            container.style.display = 'block';
 
             let highScoreWindow = document
                 .getElementById("highscore")
