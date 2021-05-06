@@ -13,6 +13,20 @@
         <div id="container"></div>
 
         <script type="module">
+            const resetControls = () => {
+                // Controls setup.
+                camera.position.x = 0;
+                camera.position.y = 0;
+                camera.position.z = 1;
+
+                controls = new TrackballControls(camera, renderer.domElement);
+                controls.rotateSpeed = 2.0;
+                controls.zoomSpeed = 1.2;
+                controls.panSpeed = 0.8;
+                controls.minDistnace = 0;
+                controls.maxDistance = 10;
+            };
+
             //import Stats from 'https://mrdoob.github.io/stats.js/build/stats.module.js';
             import * as THREE from 'https://unpkg.com/three@0.127.0/build/three.module.js'
             import {TrackballControls} from 'https://unpkg.com/three@0.127.0/examples/jsm/controls/TrackballControls.js'
@@ -71,8 +85,8 @@
                 vColor.a = 1.0;
 
                 // Size.
-                float size = 1.0;
-                float scale = .50;
+                float size = 2.0;
+                float scale = 1.0;
                 gl_PointSize = size * ( scale / - ( mvPosition).z );
 
                 // Position.
@@ -132,13 +146,7 @@
                 //stats = new Stats();
                 //container.appendChild(stats.dom);
 
-                // Controls setup.
-                controls = new TrackballControls(camera, renderer.domElement);
-                controls.rotateSpeed = 2.0;
-                controls.zoomSpeed = 1.2;
-                controls.panSpeed = 0.8;
-                controls.minDistnace = 0;
-                controls.maxDistance = 10;
+                resetControls();
 
                 // Resize listener.
                 window.addEventListener('resize', () => {
@@ -151,6 +159,9 @@
 
             // Animation loop.
             function animate(now) {
+
+                particleSystem.rotation.y = 0.00001 * now;
+
                 uniforms.time.value = now / 1000.0;
                 renderer.render(scene, camera);
 
@@ -285,6 +296,7 @@
                     points.push(point);
                 }
                 updateGeometry(points);
+                resetControls();
 
                 //
                 /*
@@ -319,6 +331,7 @@
                 });
 
                 updateGeometry(points);
+                resetControls();
 
                 /*
                 let lines = objText.split(/[\r\n]+/g);
@@ -386,6 +399,7 @@
             }
 
             window.addEventListener("message", (event) => {
+                geometry.drawRange.count = 0;
                 console.log(event);
                 getFileFromUrl(event.data);
             }, false);
